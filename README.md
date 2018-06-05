@@ -86,7 +86,7 @@ public async Task ProcessPayment(string invoiceId, int amountInCents, Person cus
     }
     catch (PaymentGatewayException ex)
     {
-        const string Key = "Customer';
+        const string Key = "Customer";
 
         if (ex.HasSerializedData(Key) == false)
         {
