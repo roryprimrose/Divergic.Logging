@@ -43,7 +43,13 @@ public async Task ProcessPayment(string invoiceId, int amountInCents, Person cus
 }
 ```
 
-This will append the context data to the ```Exception.Data``` property. The context data appended to the exception will be JSON serialized as required.
+This will append the context data to the ```Exception.Data``` property.
+
+The context data appended to the exception will be JSON serialized as required. In the example above, the ```Exception.Data["ContextData"]``` entry would look something like the following.
+
+```
+"{\"invoiceId\":\"239349asfd-234234\",\"amountInCents\":3995}"
+```
 
 **NOTE:** Logging the ```Exception.Data``` property remains the responsibility of logging providers configured on the logger factory.
 
