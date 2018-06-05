@@ -22,7 +22,7 @@ public class PaymentGatewayException: Exception
 }
 ```
 
-Logging an exception may not provide enough information to respond to a log entry. You can provide any context data you like with this package by using the ```LogErrorWithContext``` and ```LogCriticalWithContext``` extension methods on ```ILogger```.
+Logging the exception alone may not provide enough information to respond to a log entry. You can provide any context data you like with this package by using the ```LogErrorWithContext``` and ```LogCriticalWithContext``` extension methods on ```ILogger```.
 
 ```csharp
 public async Task ProcessPayment(string invoiceId, int amountInCents, Person customer, CancellationToken cancellationToken)
@@ -60,16 +60,16 @@ public async Task ProcessPayment(string invoiceId, int amountInCents, Person cus
     }
     catch (PaymentGatewayException ex)
     {
-        ex.AddSerializedData("Customer", customer);
+        const string Key = "Customer';
+
+        ex.AddSerializedData(Key, customer);
         
         _logger.LogError(ex);
     }
 }
 ``` 
 
-Adding data for the same key will ignore the request if the data has already been added. 
-
-Need to check if serialized data is already there?
+Adding data for the same key will ignore the request if the data has already been added. Need to check if serialized data is already there?
 
 ```csharp
 public async Task ProcessPayment(string invoiceId, int amountInCents, Person customer, CancellationToken cancellationToken)
