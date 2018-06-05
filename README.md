@@ -11,6 +11,17 @@ There are two NuGet packages to give flexibility around how applications can use
 
 # Logging context data
 
+Consider the following exception.
+
+```csharp
+public class PaymentGatewayException: Exception
+{
+    public PaymentGatewayException() : base("Failed to process complete transaction at the payment gateway.")
+    {
+    }
+}
+```
+
 Logging an exception may not provide enough information to respond to a log entry. You can provide any context data you like with this package by using the ```LogErrorWithContext``` and ```LogCriticalWithContext``` extension methods on ```ILogger```.
 
 ```csharp
