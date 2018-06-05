@@ -103,7 +103,7 @@
 
             _output.WriteLine("Stored data is: {0}", actual);
 
-            actual.Should().Be(typeof(SerializeFailure).FullName);
+            actual.Should().Be(typeof(EmptyModel).FullName);
         }
 
         [Fact]
