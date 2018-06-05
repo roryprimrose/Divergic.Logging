@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Divergic.Logging.xml</DocumentationFile>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <NeutralLanguage>en-US</NeutralLanguage>
+
+    <Title>ILogger extensions for logging exception context data</Title>
+    <Authors>Rory Primrose</Authors>
+    <Company>Divergic Ptd Ltd</Company>
+    <Description>This library contains extension methods for ILogger for logging exception context data.</Description>
+    <Copyright>Copyright © Divergic Ptd Ltd 2018</Copyright>
+    <PackageLicenseUrl>https://github.com/Divergic/Divergic.Logging/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Divergic/Divergic.Logging</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Divergic/Divergic.Logging</RepositoryUrl>
+    <PackageTags>Logging</PackageTags>
+    <IncludeSymbols>true</IncludeSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ensure.That" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+</Project>

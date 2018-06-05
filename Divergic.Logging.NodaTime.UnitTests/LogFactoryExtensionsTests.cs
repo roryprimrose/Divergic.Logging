@@ -1,0 +1,33 @@
+﻿namespace Divergic.Logging.NodaTime.UnitTests
+{
+    using System;
+    using System.Linq;
+    using FluentAssertions;
+    using Microsoft.Extensions.Logging;
+    using NSubstitute;
+    using Xunit;
+
+    public class LogFactoryExtensionsTests
+    {
+        [Fact]
+        public void UsingNodaTimeTypesConfiguresContextDataSerializerWithNodaTimeTest()
+        {
+            var factory = Substitute.For<ILoggerFactory>();
+
+            factory.UsingNodaTimeTypes();
+
+            ExceptionData.SerializerSettings.Converters
+                .Any(x => x.GetType().FullName.StartsWith("NodaTime.Serialization.JsonNet.")).Should().BeTrue();
+        }
+
+        [Fact]
+        public void UsingNodaTimeTypesThrowsExceptionWithNullFactoryTest()
+        {
+            ILoggerFactory factory = null;
+
+            Action action = () => factory.UsingNodaTimeTypes();
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+    }
+}
