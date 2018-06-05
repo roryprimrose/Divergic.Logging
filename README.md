@@ -49,7 +49,7 @@ This will append the context data to the ```Exception.Data``` property. The cont
 
 # Append additional data
 
-The ```Divergic.Logging``` package also provides extension methods on ```Exception``` for adding additional data to ```Exception.Data```.
+The ```Divergic.Logging``` package also provides extension methods on ```Exception``` for adding additional data.
 
 ```csharp
 public async Task ProcessPayment(string invoiceId, int amountInCents, Person customer, CancellationToken cancellationToken)
@@ -60,7 +60,7 @@ public async Task ProcessPayment(string invoiceId, int amountInCents, Person cus
     }
     catch (PaymentGatewayException ex)
     {
-        const string Key = "Customer';
+        const string Key = "Customer";
 
         ex.AddSerializedData(Key, customer);
         
@@ -96,7 +96,7 @@ public async Task ProcessPayment(string invoiceId, int amountInCents, Person cus
 
 Adding serialized context data to an exception is only as useful as how the data can be understood. ```NodaTime.Instant``` is a good example of this. The native JSON serialization of an Instant value will be ```{}``` rather than a readable date/time value. 
 
-The Divergic.Logging.NodaTime package provides an extension method on ```ILoggerFactory``` to configure NodaTime support for adding exception context data.
+The Divergic.Logging.NodaTime package provides an extension method on ```ILoggerFactory``` to configure NodaTime support when adding exception context data.
 
 ```csharp
 public void Configure(
