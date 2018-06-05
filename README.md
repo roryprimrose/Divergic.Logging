@@ -38,7 +38,7 @@ This will append the context data to the ```Exception.Data``` property. The cont
 
 # Append additional data
 
-The ```Divergic.Logging``` package also provides extension methods for adding additional data to ```Exception.Data```.
+The ```Divergic.Logging``` package also provides extension methods on ```Exception``` for adding additional data to ```Exception.Data```.
 
 ```csharp
 public async Task ProcessPayment(string invoiceId, int amountInCents, Person customer, CancellationToken cancellationToken)
