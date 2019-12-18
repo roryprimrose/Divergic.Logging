@@ -1,3 +1,7 @@
+[![Coverage Status](https://coveralls.io/repos/github/divergic/Divergic.Logging/badge.svg?branch=master)](https://coveralls.io/github/divergic/Divergic.Logging?branch=master)
+
+[![Actions Status](https://github.com/divergic/Divergic.Logging/workflows/CI/badge.svg)](https://github.com/divergic/Divergic.Logging/actions)
+
 # Introduction    
 
 The Divergic.Logging packages provide ```ILogger``` and ```ILoggerFactory```  extension methods for adding context data when logging exceptions.

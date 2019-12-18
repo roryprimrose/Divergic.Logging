@@ -3,7 +3,6 @@
     using System;
     using Divergic.Logging;
     using EnsureThat;
-    using Microsoft.Extensions.Logging.Internal;
 
     /// <summary>
     /// The <see cref="LoggerExtensions"/>
