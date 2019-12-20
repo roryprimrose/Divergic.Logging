@@ -91,7 +91,7 @@ jobs:
         release_name: Release ${{ steps.gitversion.outputs.NuGetVersionV2 }}
         draft: false
         prerelease: ${{ contains(steps.gitversion.outputs.NuGetVersionV2, 'beta') }}
-      if: github.ref == 'refs/heads/master'
+#      if: github.ref == 'refs/heads/master'
     
     - name: Upload Release Asset
       id: upload-release-asset 
@@ -100,7 +100,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: staging/Divergic.Logging.*.symbols.nupkg
+        asset_path: $GITHUB_WORKSPACE/staging/Divergic.Logging.*.symbols.nupkg
         asset_name: ${{ format('Divergic.Logging.{0}.nupkg', steps.gitversion.outputs.NuGetVersionV2) }}
         asset_content_type: application/zip
-      if: github.ref == 'refs/heads/master'
+#      if: github.ref == 'refs/heads/master'
