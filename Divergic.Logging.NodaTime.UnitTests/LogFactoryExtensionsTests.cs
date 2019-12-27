@@ -10,7 +10,7 @@
     public class LogFactoryExtensionsTests
     {
         [Fact]
-        public void UsingNodaTimeTypesConfiguresContextDataSerializerWithNodaTimeTest()
+        public void UsingNodaTimeTypesConfiguresContextDataSerializerWithNodaTime()
         {
             var factory = Substitute.For<ILoggerFactory>();
 
@@ -21,7 +21,7 @@
         }
 
         [Fact]
-        public void UsingNodaTimeTypesThrowsExceptionWithNullFactoryTest()
+        public void UsingNodaTimeTypesThrowsExceptionWithNullFactory()
         {
             ILoggerFactory factory = null;
 

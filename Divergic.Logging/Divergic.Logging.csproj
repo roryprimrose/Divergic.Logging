@@ -12,7 +12,7 @@
     <Company>Divergic Ptd Ltd</Company>
     <Description>This library contains extension methods for ILogger for logging exception context data.</Description>
     <Copyright>Copyright © Divergic Ptd Ltd 2018</Copyright>
-    <PackageLicenseUrl>https://github.com/Divergic/Divergic.Logging/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Divergic/Divergic.Logging</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Divergic/Divergic.Logging</RepositoryUrl>
     <PackageTags>Logging</PackageTags>

@@ -4,12 +4,12 @@
     using System.Collections.Generic;
     using Divergic.Logging.UnitTests.Models;
     using FluentAssertions;
+    using global::Xunit;
+    using global::Xunit.Abstractions;
     using ModelBuilder;
     using Newtonsoft.Json;
     using NodaTime;
     using NodaTime.Serialization.JsonNet;
-    using Xunit;
-    using Xunit.Abstractions;
 
     public class ExceptionDataTests
     {
@@ -35,7 +35,7 @@
         }
 
         [Fact]
-        public void AddContextDataAppendsSerializedValueToExceptionTest()
+        public void AddContextDataAppendsSerializedValueToException()
         {
             var value = Model.Create<Company>();
             var expected = JsonConvert.SerializeObject(value, ExceptionData.SerializerSettings);
@@ -52,7 +52,7 @@
         }
 
         [Fact]
-        public void AddContextDataThrowsExceptionWithNullDataTest()
+        public void AddContextDataThrowsExceptionWithNullData()
         {
             var sut = new TimeoutException();
 
@@ -62,7 +62,7 @@
         }
 
         [Fact]
-        public void AddContextDataThrowsExceptionWithNullExceptionTest()
+        public void AddContextDataThrowsExceptionWithNullException()
         {
             var value = Guid.NewGuid().ToString();
             var sut = (Exception) null;
@@ -73,7 +73,7 @@
         }
 
         [Fact]
-        public void AddSerializedDataAppendsDataToStringWhenSerializationFailsTest()
+        public void AddSerializedDataAppendsDataToStringWhenSerializationFails()
         {
             var key = Guid.NewGuid().ToString("N");
             var value = new SerializeFailure();
@@ -90,7 +90,7 @@
         }
 
         [Fact]
-        public void AddSerializedDataAppendsDataToStringWhenSerializationReturnsEmptyJsonTest()
+        public void AddSerializedDataAppendsDataToStringWhenSerializationReturnsEmptyJson()
         {
             var key = Guid.NewGuid().ToString("N");
             var value = new EmptyModel();
@@ -107,7 +107,7 @@
         }
 
         [Fact]
-        public void AddSerializedDataAppendsSerializedNonSystemValueTypeTest()
+        public void AddSerializedDataAppendsSerializedNonSystemValueType()
         {
             var key = Guid.NewGuid().ToString("N");
             var value = SystemClock.Instance.GetCurrentInstant();
@@ -125,7 +125,7 @@
         }
 
         [Fact]
-        public void AddSerializedDataAppendsSerializedValueToExceptionTest()
+        public void AddSerializedDataAppendsSerializedValueToException()
         {
             var key = Guid.NewGuid().ToString("N");
             var value = Model.Create<Company>();
@@ -160,7 +160,7 @@
         }
 
         [Fact]
-        public void AddSerializedDataDoesNotAppendValueWhenDataAlreadyStoredTest()
+        public void AddSerializedDataDoesNotAppendValueWhenDataAlreadyStored()
         {
             var key = Guid.NewGuid().ToString("N");
             var value = Guid.NewGuid().ToString();
@@ -179,7 +179,7 @@
         }
 
         [Fact]
-        public void AddSerializedDataDoesNotAppendValueWhenSerializationAndToStringBothFailTest()
+        public void AddSerializedDataDoesNotAppendValueWhenSerializationAndToStringBothFail()
         {
             var key = Guid.NewGuid().ToString("N");
             var value = new ToStringFailure();
@@ -192,7 +192,7 @@
         }
 
         [Fact]
-        public void AddSerializedDataDoesNotIncludeNullNestedTypeInExceptionDataTest()
+        public void AddSerializedDataDoesNotIncludeNullNestedTypeInExceptionData()
         {
             var key = Guid.NewGuid().ToString();
             var value = Model.Ignoring<Company>(x => x.Owner).Create<Company>();
@@ -207,7 +207,7 @@
         }
 
         [Fact]
-        public void AddSerializedDataIgnoresFailureToReadPropertiesForExceptionDataTest()
+        public void AddSerializedDataIgnoresFailureToReadPropertiesForExceptionData()
         {
             var key = Guid.NewGuid().ToString();
             var value = new SerializeFailure
@@ -250,7 +250,7 @@
         }
 
         [Fact]
-        public void AddSerializedDataThrowsExceptionWithNullDataTest()
+        public void AddSerializedDataThrowsExceptionWithNullData()
         {
             var key = Guid.NewGuid().ToString("N");
 
@@ -262,7 +262,7 @@
         }
 
         [Fact]
-        public void AddSerializedDataThrowsExceptionWithNullExceptionTest()
+        public void AddSerializedDataThrowsExceptionWithNullException()
         {
             var key = Guid.NewGuid().ToString("N");
             var value = Guid.NewGuid().ToString();
@@ -297,7 +297,7 @@
         }
 
         [Fact]
-        public void DefaultSerializerSettingsReturnsNewDefaultValueTest()
+        public void DefaultSerializerSettingsReturnsNewDefaultValue()
         {
             ExceptionData.DefaultSerializerSettings.MaxDepth = Environment.TickCount;
 
@@ -305,7 +305,7 @@
         }
 
         [Fact]
-        public void HasSerializedDataReturnsWhetherExceptionContainsDataTest()
+        public void HasSerializedDataReturnsWhetherExceptionContainsData()
         {
             var key = Guid.NewGuid().ToString("N");
             var value = Guid.NewGuid().ToString();
@@ -320,7 +320,7 @@
         }
 
         [Fact]
-        public void HasSerializedDataThrowsExceptionWithNullExceptionTest()
+        public void HasSerializedDataThrowsExceptionWithNullException()
         {
             var key = Guid.NewGuid().ToString("N");
 
@@ -353,7 +353,7 @@
         }
 
         [Fact]
-        public void SerializerSettingsCanAssignDefaultSerializerSettingsTest()
+        public void SerializerSettingsCanAssignDefaultSerializerSettings()
         {
             ExceptionData.SerializerSettings.MaxDepth = Environment.TickCount;
 
