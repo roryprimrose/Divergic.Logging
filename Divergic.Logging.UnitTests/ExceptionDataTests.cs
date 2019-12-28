@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using Divergic.Logging.UnitTests.Models;
     using FluentAssertions;
     using global::Xunit;
@@ -75,7 +76,7 @@
         [Fact]
         public void AddSerializedDataAppendsDataToStringWhenSerializationFails()
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             var value = new SerializeFailure();
 
             var sut = new TimeoutException();
@@ -92,7 +93,7 @@
         [Fact]
         public void AddSerializedDataAppendsDataToStringWhenSerializationReturnsEmptyJson()
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             var value = new EmptyModel();
 
             var sut = new TimeoutException();
@@ -109,7 +110,7 @@
         [Fact]
         public void AddSerializedDataAppendsSerializedNonSystemValueType()
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             var value = SystemClock.Instance.GetCurrentInstant();
             var expected = JsonConvert.SerializeObject(value, ExceptionData.SerializerSettings);
 
@@ -127,7 +128,7 @@
         [Fact]
         public void AddSerializedDataAppendsSerializedValueToException()
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             var value = Model.Create<Company>();
             var expected = JsonConvert.SerializeObject(value, ExceptionData.SerializerSettings);
 
@@ -146,7 +147,7 @@
         [MemberData(nameof(ValueTypeValues))]
         public void AddSerializedDataAppendsValueTypeValuesTest(object value)
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
 
             var sut = new TimeoutException();
 
@@ -162,7 +163,7 @@
         [Fact]
         public void AddSerializedDataDoesNotAppendValueWhenDataAlreadyStored()
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             var value = Guid.NewGuid().ToString();
             var nextValue = Guid.NewGuid().ToString();
 
@@ -181,7 +182,7 @@
         [Fact]
         public void AddSerializedDataDoesNotAppendValueWhenSerializationAndToStringBothFail()
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             var value = new ToStringFailure();
 
             var sut = new TimeoutException();
@@ -228,7 +229,7 @@
         [InlineData("Stuff", true)]
         public void AddSerializedDataOnlyAppendsStringsWithContentsTest(string value, bool expected)
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
 
             var sut = new TimeoutException();
 
@@ -252,7 +253,7 @@
         [Fact]
         public void AddSerializedDataThrowsExceptionWithNullData()
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
 
             var sut = new TimeoutException();
 
@@ -264,7 +265,7 @@
         [Fact]
         public void AddSerializedDataThrowsExceptionWithNullException()
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             var value = Guid.NewGuid().ToString();
             var sut = (Exception) null;
 
@@ -307,9 +308,9 @@
         [Fact]
         public void HasSerializedDataReturnsWhetherExceptionContainsData()
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             var value = Guid.NewGuid().ToString();
-            var keyNotFound = Guid.NewGuid().ToString("N");
+            var keyNotFound = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
 
             var sut = new TimeoutException();
 
@@ -322,7 +323,7 @@
         [Fact]
         public void HasSerializedDataThrowsExceptionWithNullException()
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
 
             var sut = (Exception) null;
 
