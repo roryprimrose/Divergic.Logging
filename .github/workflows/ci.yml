@@ -33,7 +33,7 @@ jobs:
     - name: Setup dotnet v2.1
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '2.1.607' # SDK Version to use.
+        dotnet-version: '2.1.300' # SDK Version to use.
 
 #    - name: Setup dotnet v2.2
 #      uses: actions/setup-dotnet@v1
