@@ -17,7 +17,7 @@
             factory.UsingNodaTimeTypes();
 
             ExceptionData.SerializerSettings.Converters
-                .Any(x => x.GetType().FullName.StartsWith("NodaTime.Serialization.JsonNet.")).Should().BeTrue();
+                .Any(x => x.GetType().FullName.StartsWith("NodaTime.Serialization.JsonNet.", StringComparison.Ordinal)).Should().BeTrue();
         }
 
         [Fact]
