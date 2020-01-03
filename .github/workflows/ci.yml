@@ -47,16 +47,15 @@ jobs:
       with:
         dotnet-version: '2.1.300' # SDK Version to use.
 
-#    - name: Setup dotnet v2.2
-#      uses: actions/setup-dotnet@v1
-#      with:
-#        dotnet-version: '2.2.207' # SDK Version to use.
-
     - name: Setup dotnet v3.1
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.100' # SDK Version to use.
 
+# This step is required while waiting on https://github.com/actions/setup-dotnet/issues/25 to be resolved
+    - name: .net SxS
+      run: rsync -a ${DOTNET_ROOT/3.1.100/2.1.300}/* $DOTNET_ROOT/
+      
     - name: Installed dotnet versions
       run: dotnet --info
 
