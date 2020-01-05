@@ -52,7 +52,7 @@ jobs:
       with:
         dotnet-version: '3.1.100' # SDK Version to use.
 
-# This step is required while waiting on https://github.com/actions/setup-dotnet/issues/25 to be resolved
+    # This step is required while waiting on https://github.com/actions/setup-dotnet/issues/25 to be resolved
     - name: .net SxS
       run: rsync -a ${DOTNET_ROOT/3.1.100/2.1.300}/* $DOTNET_ROOT/
       
@@ -67,6 +67,10 @@ jobs:
 
     - name: Test
       run: dotnet test -c Release --no-build /p:CollectCoverage=true /p:CoverletOutput="$GITHUB_WORKSPACE/coverage/lcov.info" /p:MergeWith="$GITHUB_WORKSPACE/coverage/lcov.info" /p:CoverletOutputFormat=lcov                                                       
+    
+    - name: Echo coverage
+      run: cat "$GITHUB_WORKSPACE/coverage/lcov.info"
+      if: always()
     
     - name: Coveralls
       uses: coverallsapp/github-action@master
