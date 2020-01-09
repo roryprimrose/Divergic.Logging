@@ -7,12 +7,14 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <NeutralLanguage>en-US</NeutralLanguage>
 
+    <PackageId>Divergic.Logging</PackageId>
+    <PackageDescription>This library contains extension methods for ILogger for logging exception context data.</PackageDescription>
+    <Version>1.0.0</Version>
     <Title>ILogger extensions for logging exception context data</Title>
     <Authors>Rory Primrose</Authors>
-    <Company>Divergic Ptd Ltd</Company>
-    <Description>This library contains extension methods for ILogger for logging exception context data.</Description>
+    <Company>Divergic Pty Ltd</Company>
     <Copyright>Copyright © Divergic Ptd Ltd 2018</Copyright>
-    <PackageLicenseUrl>https://github.com/Divergic/Divergic.Logging/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Divergic/Divergic.Logging</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Divergic/Divergic.Logging</RepositoryUrl>
     <PackageTags>Logging</PackageTags>

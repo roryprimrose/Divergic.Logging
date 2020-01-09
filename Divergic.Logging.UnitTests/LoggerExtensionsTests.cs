@@ -1,102 +1,89 @@
 ﻿namespace Divergic.Logging.UnitTests
 {
     using System;
+    using Divergic.Logging.Xunit;
     using FluentAssertions;
+    using global::Xunit;
+    using global::Xunit.Abstractions;
     using Microsoft.Extensions.Logging;
-    using NSubstitute;
-    using Xunit;
 
     public class LoggerExtensionsTests
     {
-        [Fact]
-        public void LogCriticalWithContextUsesMessageFormatterToReturnStateTest()
+        private readonly ICacheLogger _logger;
+
+        public LoggerExtensionsTests(ITestOutputHelper output)
         {
-            var eventId = new EventId(Environment.TickCount);
-            var exception = new TimeoutException();
-            var message = Guid.NewGuid().ToString();
-
-            var log = Substitute.For<ILogger>();
-
-            log.When(x => x.Log(Arg.Any<LogLevel>(),  Arg.Any<EventId>(), Arg.Any<object>(), Arg.Any<Exception>(), Arg.Any<Func<object, Exception, string>>())).Do(
-                x =>
-                {
-                    var formatter = x.Arg<Func<object, Exception, string>>();
-                    var expected = formatter(x.Arg<object>(), x.Arg<Exception>());
-
-                    expected.Should().Be(message);
-                });
-
-            log.LogCriticalWithContext(eventId, exception, null, message);
+            _logger = output.BuildLogger();
         }
 
         [Fact]
-        public void LogCriticalWithContextIgnoresNullDataTest()
+        public void LogCriticalWithContextThrowsExceptionWithEventIdNullExceptionAndContextData()
         {
             var eventId = new EventId(Environment.TickCount);
-            var exception = new TimeoutException();
-            const string Message = "{0}-{1}";
-            var args = new object[]
-            {
-                123,
-                true
-            };
-
-            var log = Substitute.For<ILogger>();
-
-            log.LogCriticalWithContext(eventId, exception, null, Message, args);
-
-            log.Received().Log(
-                LogLevel.Critical,
-                eventId,
-                Arg.Is<object>(x => x.ToString() == "123-True"),
-                Arg.Is<Exception>(x => x == exception && x.Data["ContextData"] == null),
-                Arg.Any<Func<object, Exception, string>>());
-        }
-
-        [Fact]
-        public void LogCriticalWithContextLogsExceptionWithDefaultEventIdTest()
-        {
-            var exception = new TimeoutException();
             var contextData = Guid.NewGuid().ToString();
 
-            var log = Substitute.For<ILogger>();
+            Action action = () => _logger.LogCriticalWithContext(eventId, null, contextData);
 
-            log.LogCriticalWithContext(exception, contextData);
-
-            log.Received().Log(
-                LogLevel.Critical,
-                Arg.Is<EventId>(x => x.Id == 0),
-                Arg.Any<object>(),
-                Arg.Is<Exception>(x => x == exception && x.Data["ContextData"].ToString().Contains(contextData)),
-                Arg.Any<Func<object, Exception, string>>());
+            action.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
-        public void LogCriticalWithContextLogsExceptionWithMessageAndDefaultEventIdTest()
+        public void LogCriticalWithContextThrowsExceptionWithEventIdNullExceptionContextDataAndMessage()
         {
-            var exception = new TimeoutException();
+            var eventId = new EventId(Environment.TickCount);
             var contextData = Guid.NewGuid().ToString();
             const string Message = "{0}-{1}";
             var args = new object[]
             {
-                123,
-                true
+                123, true
             };
 
-            var log = Substitute.For<ILogger>();
+            Action action = () => _logger.LogCriticalWithContext(eventId, null, contextData, Message, args);
 
-            log.LogCriticalWithContext(exception, contextData, Message, args);
-
-            log.Received().Log(
-                LogLevel.Critical,
-                Arg.Is<EventId>(x => x.Id == 0),
-                Arg.Is<object>(x => x.ToString() == "123-True"),
-                Arg.Is<Exception>(x => x == exception && x.Data["ContextData"].ToString().Contains(contextData)),
-                Arg.Any<Func<object, Exception, string>>());
+            action.Should().Throw<ArgumentNullException>();
         }
-        
+
         [Fact]
-        public void LogCriticalWithContextLogsExceptionWithMessageTest()
+        public void LogCriticalWithContextThrowsExceptionWithNullExceptionAndContextData()
+        {
+            var contextData = Guid.NewGuid().ToString();
+
+            Action action = () => _logger.LogCriticalWithContext(null, contextData);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogCriticalWithContextThrowsExceptionWithNullExceptionContextDataAndMessage()
+        {
+            var contextData = Guid.NewGuid().ToString();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            Action action = () => _logger.LogCriticalWithContext(null, contextData, Message, args);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogCriticalWithContextThrowsExceptionWithNullLoggerEventIdExceptionAndContextData()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+
+            var log = (ILogger)null;
+
+            Action action = () => log.LogCriticalWithContext(eventId, exception, contextData);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogCriticalWithContextThrowsExceptionWithNullLoggerEventIdExceptionContextDataAndMessage()
         {
             var eventId = new EventId(Environment.TickCount);
             var exception = new TimeoutException();
@@ -104,55 +91,10 @@
             const string Message = "{0}-{1}";
             var args = new object[]
             {
-                123,
-                true
+                123, true
             };
 
-            var log = Substitute.For<ILogger>();
-
-            log.LogCriticalWithContext(eventId, exception, contextData, Message, args);
-
-            log.Received().Log(
-                LogLevel.Critical,
-                eventId,
-                Arg.Is<object>(x => x.ToString() == "123-True"),
-                Arg.Is<Exception>(x => x == exception && x.Data["ContextData"].ToString().Contains(contextData)),
-                Arg.Any<Func<object, Exception, string>>());
-        }
-
-        [Fact]
-        public void LogCriticalWithContextLogsExceptionWithoutMessageTest()
-        {
-            var eventId = new EventId(Environment.TickCount);
-            var exception = new TimeoutException();
-            var contextData = Guid.NewGuid().ToString();
-
-            var log = Substitute.For<ILogger>();
-
-            log.LogCriticalWithContext(eventId, exception, contextData);
-
-            log.Received().Log(
-                LogLevel.Critical,
-                eventId,
-                Arg.Any<object>(),
-                Arg.Is<Exception>(x => x == exception && x.Data["ContextData"].ToString().Contains(contextData)),
-                Arg.Any<Func<object, Exception, string>>());
-        }
-
-        [Fact]
-        public void LogCriticalWithContextThrowsExceptionWithNullLogTest()
-        {
-            var eventId = new EventId(Environment.TickCount);
-            var exception = new TimeoutException();
-            var contextData = Guid.NewGuid().ToString();
-            const string Message = "{0}-{1}";
-            var args = new object[]
-            {
-                123,
-                true
-            };
-
-            var log = (ILogger) null;
+            var log = (ILogger)null;
 
             Action action = () => log.LogCriticalWithContext(eventId, exception, contextData, Message, args);
 
@@ -160,117 +102,73 @@
         }
 
         [Fact]
-        public void LogErrorWithContextIgnoresNullDataTest()
-        {
-            var eventId = new EventId(Environment.TickCount);
-            var exception = new TimeoutException();
-            const string Message = "{0}-{1}";
-            var args = new object[]
-            {
-                123,
-                true
-            };
-
-            var log = Substitute.For<ILogger>();
-
-            log.LogErrorWithContext(eventId, exception, null, Message, args);
-
-            log.Received().Log(
-                LogLevel.Error,
-                eventId,
-                Arg.Is<object>(x => x.ToString() == "123-True"),
-                Arg.Is<Exception>(x => x == exception && x.Data.Contains("ContextData") == false),
-                Arg.Any<Func<object, Exception, string>>());
-        }
-
-        [Fact]
-        public void LogErrorWithContextLogsExceptionWithDefaultEventIdTest()
+        public void LogCriticalWithContextThrowsExceptionWithNullLoggerExceptionAndContextData()
         {
             var exception = new TimeoutException();
             var contextData = Guid.NewGuid().ToString();
 
-            var log = Substitute.For<ILogger>();
+            var log = (ILogger)null;
 
-            log.LogErrorWithContext(exception, contextData);
+            Action action = () => log.LogCriticalWithContext(exception, contextData);
 
-            log.Received().Log(
-                LogLevel.Error,
-                Arg.Is<EventId>(x => x.Id == 0),
-                Arg.Any<object>(),
-                Arg.Is<Exception>(x => x == exception && x.Data["ContextData"].ToString().Contains(contextData)),
-                Arg.Any<Func<object, Exception, string>>());
+            action.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
-        public void LogErrorWithContextLogsExceptionWithMessageAndDefaultEventIdTest()
+        public void LogCriticalWithContextThrowsExceptionWithNullLoggerExceptionContextDataAndMessage()
         {
             var exception = new TimeoutException();
             var contextData = Guid.NewGuid().ToString();
             const string Message = "{0}-{1}";
             var args = new object[]
             {
-                123,
-                true
+                123, true
             };
 
-            var log = Substitute.For<ILogger>();
+            var log = (ILogger)null;
 
-            log.LogErrorWithContext(exception, contextData, Message, args);
+            Action action = () => log.LogCriticalWithContext(exception, contextData, Message, args);
 
-            log.Received().Log(
-                LogLevel.Error,
-                Arg.Is<EventId>(x => x.Id == 0),
-                Arg.Is<object>(x => x.ToString() == "123-True"),
-                Arg.Is<Exception>(x => x == exception && x.Data["ContextData"].ToString().Contains(contextData)),
-                Arg.Any<Func<object, Exception, string>>());
+            action.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
-        public void LogErrorWithContextLogsExceptionWithMessageTest()
-        {
-            var eventId = new EventId(Environment.TickCount);
-            var exception = new TimeoutException();
-            var contextData = Guid.NewGuid().ToString();
-            const string Message = "{0}-{1}";
-            var args = new object[]
-            {
-                123,
-                true
-            };
-
-            var log = Substitute.For<ILogger>();
-
-            log.LogErrorWithContext(eventId, exception, contextData, Message, args);
-
-            log.Received().Log(
-                LogLevel.Error,
-                eventId,
-                Arg.Is<object>(x => x.ToString() == "123-True"),
-                Arg.Is<Exception>(x => x == exception && x.Data["ContextData"].ToString().Contains(contextData)),
-                Arg.Any<Func<object, Exception, string>>());
-        }
-
-        [Fact]
-        public void LogErrorWithContextLogsExceptionWithoutMessageTest()
+        public void LogCriticalWithWritesLogWithEventIdExceptionAndContextData()
         {
             var eventId = new EventId(Environment.TickCount);
             var exception = new TimeoutException();
             var contextData = Guid.NewGuid().ToString();
 
-            var log = Substitute.For<ILogger>();
+            _logger.LogCriticalWithContext(eventId, exception, contextData);
 
-            log.LogErrorWithContext(eventId, exception, contextData);
+            var actual = _logger.Last;
 
-            log.Received().Log(
-                LogLevel.Error,
-                eventId,
-                Arg.Any<object>(),
-                Arg.Is<Exception>(x => x == exception && x.Data["ContextData"].ToString().Contains(contextData)),
-                Arg.Any<Func<object, Exception, string>>());
+            actual.LogLevel.Should().Be(LogLevel.Critical);
+            actual.EventId.Id.Should().Be(eventId.Id);
+            actual.Message.Should().BeNull();
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data["ContextData"].ToString().Should().Contain(contextData);
         }
 
         [Fact]
-        public void LogErrorWithContextThrowsExceptionWithNullLogTest()
+        public void LogCriticalWithWritesLogWithEventIdExceptionAndNullContextData()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var exception = new TimeoutException();
+
+            _logger.LogCriticalWithContext(eventId, exception, null);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Critical);
+            actual.EventId.Id.Should().Be(eventId.Id);
+            actual.Message.Should().BeNull();
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void LogCriticalWithWritesLogWithEventIdExceptionContextDataAndMessage()
         {
             var eventId = new EventId(Environment.TickCount);
             var exception = new TimeoutException();
@@ -278,15 +176,388 @@
             const string Message = "{0}-{1}";
             var args = new object[]
             {
-                123,
-                true
+                123, true
             };
 
-            var log = (ILogger) null;
+            _logger.LogCriticalWithContext(eventId, exception, contextData, Message, args);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Critical);
+            actual.EventId.Id.Should().Be(eventId.Id);
+            actual.Message.Should().Be("123-True");
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data["ContextData"].ToString().Should().Contain(contextData);
+        }
+
+        [Fact]
+        public void LogCriticalWithWritesLogWithEventIdExceptionNullContextDataAndMessage()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var exception = new TimeoutException();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            _logger.LogCriticalWithContext(eventId, exception, null, Message, args);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Critical);
+            actual.EventId.Id.Should().Be(eventId.Id);
+            actual.Message.Should().Be("123-True");
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void LogCriticalWithWritesLogWithExceptionAndContextData()
+        {
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+
+            _logger.LogCriticalWithContext(exception, contextData);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Critical);
+            actual.EventId.Id.Should().Be(0);
+            actual.Message.Should().BeNull();
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data["ContextData"].ToString().Should().Contain(contextData);
+        }
+
+        [Fact]
+        public void LogCriticalWithWritesLogWithExceptionAndNullContextData()
+        {
+            var exception = new TimeoutException();
+
+            _logger.LogCriticalWithContext(exception, null);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Critical);
+            actual.EventId.Id.Should().Be(0);
+            actual.Message.Should().BeNull();
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void LogCriticalWithWritesLogWithExceptionContextDataAndMessage()
+        {
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            _logger.LogCriticalWithContext(exception, contextData, Message, args);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Critical);
+            actual.EventId.Id.Should().Be(0);
+            actual.Message.Should().Be("123-True");
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data["ContextData"].ToString().Should().Contain(contextData);
+        }
+
+        [Fact]
+        public void LogCriticalWithWritesLogWithExceptionNullContextDataAndMessage()
+        {
+            var exception = new TimeoutException();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            _logger.LogCriticalWithContext(exception, null, Message, args);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Critical);
+            actual.EventId.Id.Should().Be(0);
+            actual.Message.Should().Be("123-True");
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void LogErrorWithContextThrowsExceptionWithEventIdNullExceptionAndContextData()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var contextData = Guid.NewGuid().ToString();
+
+            Action action = () => _logger.LogErrorWithContext(eventId, null, contextData);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogErrorWithContextThrowsExceptionWithEventIdNullExceptionContextDataAndMessage()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var contextData = Guid.NewGuid().ToString();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            Action action = () => _logger.LogErrorWithContext(eventId, null, contextData, Message, args);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogErrorWithContextThrowsExceptionWithNullExceptionAndContextData()
+        {
+            var contextData = Guid.NewGuid().ToString();
+
+            Action action = () => _logger.LogErrorWithContext(null, contextData);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogErrorWithContextThrowsExceptionWithNullExceptionContextDataAndMessage()
+        {
+            var contextData = Guid.NewGuid().ToString();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            Action action = () => _logger.LogErrorWithContext(null, contextData, Message, args);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogErrorWithContextThrowsExceptionWithNullLoggerEventIdExceptionAndContextData()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+
+            var log = (ILogger)null;
+
+            Action action = () => log.LogErrorWithContext(eventId, exception, contextData);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogErrorWithContextThrowsExceptionWithNullLoggerEventIdExceptionContextDataAndMessage()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            var log = (ILogger)null;
 
             Action action = () => log.LogErrorWithContext(eventId, exception, contextData, Message, args);
 
             action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogErrorWithContextThrowsExceptionWithNullLoggerExceptionAndContextData()
+        {
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+
+            var log = (ILogger)null;
+
+            Action action = () => log.LogErrorWithContext(exception, contextData);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogErrorWithContextThrowsExceptionWithNullLoggerExceptionContextDataAndMessage()
+        {
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            var log = (ILogger)null;
+
+            Action action = () => log.LogErrorWithContext(exception, contextData, Message, args);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void LogErrorWithWritesLogWithEventIdExceptionAndContextData()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+
+            _logger.LogErrorWithContext(eventId, exception, contextData);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Error);
+            actual.EventId.Id.Should().Be(eventId.Id);
+            actual.Message.Should().BeNull();
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data["ContextData"].ToString().Should().Contain(contextData);
+        }
+
+        [Fact]
+        public void LogErrorWithWritesLogWithEventIdExceptionAndNullContextData()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var exception = new TimeoutException();
+
+            _logger.LogErrorWithContext(eventId, exception, null);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Error);
+            actual.EventId.Id.Should().Be(eventId.Id);
+            actual.Message.Should().BeNull();
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void LogErrorWithWritesLogWithEventIdExceptionContextDataAndMessage()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            _logger.LogErrorWithContext(eventId, exception, contextData, Message, args);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Error);
+            actual.EventId.Id.Should().Be(eventId.Id);
+            actual.Message.Should().Be("123-True");
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data["ContextData"].ToString().Should().Contain(contextData);
+        }
+
+        [Fact]
+        public void LogErrorWithWritesLogWithEventIdExceptionNullContextDataAndMessage()
+        {
+            var eventId = new EventId(Environment.TickCount);
+            var exception = new TimeoutException();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            _logger.LogErrorWithContext(eventId, exception, null, Message, args);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Error);
+            actual.EventId.Id.Should().Be(eventId.Id);
+            actual.Message.Should().Be("123-True");
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void LogErrorWithWritesLogWithExceptionAndContextData()
+        {
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+
+            _logger.LogErrorWithContext(exception, contextData);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Error);
+            actual.EventId.Id.Should().Be(0);
+            actual.Message.Should().BeNull();
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data["ContextData"].ToString().Should().Contain(contextData);
+        }
+
+        [Fact]
+        public void LogErrorWithWritesLogWithExceptionAndNullContextData()
+        {
+            var exception = new TimeoutException();
+
+            _logger.LogErrorWithContext(exception, null);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Error);
+            actual.EventId.Id.Should().Be(0);
+            actual.Message.Should().BeNull();
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void LogErrorWithWritesLogWithExceptionContextDataAndMessage()
+        {
+            var exception = new TimeoutException();
+            var contextData = Guid.NewGuid().ToString();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            _logger.LogErrorWithContext(exception, contextData, Message, args);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Error);
+            actual.EventId.Id.Should().Be(0);
+            actual.Message.Should().Be("123-True");
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data["ContextData"].ToString().Should().Contain(contextData);
+        }
+
+        [Fact]
+        public void LogErrorWithWritesLogWithExceptionNullContextDataAndMessage()
+        {
+            var exception = new TimeoutException();
+            const string Message = "{0}-{1}";
+            var args = new object[]
+            {
+                123, true
+            };
+
+            _logger.LogErrorWithContext(exception, null, Message, args);
+
+            var actual = _logger.Last;
+
+            actual.LogLevel.Should().Be(LogLevel.Error);
+            actual.EventId.Id.Should().Be(0);
+            actual.Message.Should().Be("123-True");
+            actual.Exception.Should().Be(exception);
+            actual.Exception.Data.Should().BeEmpty();
         }
     }
 }

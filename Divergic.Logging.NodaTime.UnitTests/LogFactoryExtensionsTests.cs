@@ -10,18 +10,18 @@
     public class LogFactoryExtensionsTests
     {
         [Fact]
-        public void UsingNodaTimeTypesConfiguresContextDataSerializerWithNodaTimeTest()
+        public void UsingNodaTimeTypesConfiguresContextDataSerializerWithNodaTime()
         {
             var factory = Substitute.For<ILoggerFactory>();
 
             factory.UsingNodaTimeTypes();
 
             ExceptionData.SerializerSettings.Converters
-                .Any(x => x.GetType().FullName.StartsWith("NodaTime.Serialization.JsonNet.")).Should().BeTrue();
+                .Any(x => x.GetType().FullName.StartsWith("NodaTime.Serialization.JsonNet.", StringComparison.Ordinal)).Should().BeTrue();
         }
 
         [Fact]
-        public void UsingNodaTimeTypesThrowsExceptionWithNullFactoryTest()
+        public void UsingNodaTimeTypesThrowsExceptionWithNullFactory()
         {
             ILoggerFactory factory = null;
 
