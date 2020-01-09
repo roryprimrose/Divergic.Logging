@@ -76,7 +76,7 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.github_token }}
-        path-to-lcov: $GITHUB_WORKSPACE/coverage/coverage.info
+        path-to-lcov: /home/runner/work/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}/coverage/coverage.info
     
     - name: Pack
       run: dotnet pack "./${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj" -c Release --no-build --include-symbols -o $GITHUB_WORKSPACE/staging
