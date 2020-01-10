@@ -56,9 +56,6 @@ jobs:
     - name: .net SxS
       run: rsync -a ${DOTNET_ROOT/3.1.100/2.1.300}/* $DOTNET_ROOT/
       
-    - name: Installed dotnet versions
-      run: dotnet --info
-
     - name: Restore
       run: dotnet restore
 
