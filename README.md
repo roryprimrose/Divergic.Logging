@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/divergic/Divergic.Logging/badge.svg?branch=master)](https://coveralls.io/github/divergic/Divergic.Logging?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Divergic/Divergic.Logging/badge.svg?branch=master)](https://coveralls.io/github/Divergic/Divergic.Logging?branch=master)
 
 [![Actions Status](https://github.com/divergic/Divergic.Logging/workflows/CI/badge.svg)](https://github.com/divergic/Divergic.Logging/actions)
 
