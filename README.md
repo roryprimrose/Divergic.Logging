@@ -1,10 +1,10 @@
-[![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Divergic/Divergic.Logging/blob/master/LICENSE)&nbsp;&nbsp;&nbsp;[![Nuget](https://img.shields.io/nuget/v/Divergic.Logging.svg)&nbsp;![Nuget](https://img.shields.io/nuget/dt/Divergic.Logging.svg)](https://www.nuget.org/packages/Divergic.Logging)
-
-[![Actions Status](https://github.com/divergic/Divergic.Logging/workflows/CI/badge.svg)](https://github.com/divergic/Divergic.Logging/actions)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/Divergic/Divergic.Logging/badge.svg?branch=master)](https://coveralls.io/github/Divergic/Divergic.Logging?branch=master)
-
 # Introduction    
 
 The Divergic.Logging packages provide ```ILogger``` and ```ILoggerFactory```  extension methods for adding context data when logging exceptions.
+
+[![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Divergic/Divergic.Logging/blob/master/LICENSE)&nbsp;&nbsp;&nbsp;[![Nuget](https://img.shields.io/nuget/v/Divergic.Logging.svg)&nbsp;![Nuget](https://img.shields.io/nuget/dt/Divergic.Logging.svg)](https://www.nuget.org/packages/Divergic.Logging)
+
+[![Actions Status](https://github.com/divergic/Divergic.Logging/workflows/CI/badge.svg)](https://github.com/divergic/Divergic.Logging/actions)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/Divergic/Divergic.Logging/badge.svg?branch=master)](https://coveralls.io/github/Divergic/Divergic.Logging?branch=master)
 
 # Installation
 
